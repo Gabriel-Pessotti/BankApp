@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import fireStore from '@react-native-firebase/firestore'
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import fireStore from '@react-native-firebase/firestore';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
 
@@ -19,9 +18,7 @@ import Google from '../../Assets/svg/google';
 import Facebook from '../../Assets/svg/facebook';
 
 const schema = yup.object().shape({
-  fullName: yup
-      .string()
-      .required("Informe seu nome completo"),
+  fullName: yup.string().required('Informe seu nome completo'),
   identifier: yup.string().email().required('Informe Seu Email'),
   password: yup
     .string()
@@ -33,8 +30,18 @@ export default function Register() {
   const navigation = useNavigation();
 
   GoogleSignin.configure({
-    webClientId: '303558338488-8p97q2ol1q9015mb48uuqu84j9sd6fld.apps.googleusercontent.com',
+    webClientId:
+      '303558338488-8p97q2ol1q9015mb48uuqu84j9sd6fld.apps.googleusercontent.com',
   });
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(async avatar => {
+      if (avatar) {
+        navigation.navigate('Home');
+      }
+    });
+    return subscriber;
+  }, []);
 
   const {
     control,
@@ -43,58 +50,61 @@ export default function Register() {
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
-      fullName:'',
+      fullName: '',
       identifier: '',
       password: '',
     },
     resolver: yupResolver(schema),
   });
 
-  
-  const email= watch('identifier')
-  const password= watch('password')
-  const fullName= watch('fullName')
+  const email = watch('identifier');
+  const password = watch('password');
+  const fullName = watch('fullName');
 
-  const sendAll = async=>{
-    onSubmit()
-    sendName()
-  }
-  
-  const sendName = () =>{
-    fireStore().collection('Infos').add({fullName:fullName}).then(() => console.log('Successfully')).catch(erro => console.error(erro, "aki"))
-  }
+  const sendAll = async => {
+    onSubmit();
+    sendName();
+  };
 
-  const onSubmit = ()=> {
-auth()
-  .createUserWithEmailAndPassword(email, password)
-  .then(() => {
-    console.log('User account created & signed in!');
-    navigation.navigate("Enter")
-  })
-  .catch(error => {
-    if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
-    }
+  const sendName = () => {
+    fireStore()
+      .collection('Infos')
+      .add({fullName: fullName})
+      .then(() => console.log('Successfully'))
+      .catch(erro => console.error(erro, 'aki'));
+  };
 
-    if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
-    }
+  const onSubmit = () => {
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+        navigation.navigate('Enter');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
 
-    console.error(error);
-  });
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
   };
 
   async function onGoogleButtonPress() {
     console.log('clicou');
     // Check if your device supports Google Play
-    await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token
-    const { idToken } = await GoogleSignin.signIn();
-    console.log(idToken)
-  
+    const {idToken} = await GoogleSignin.signIn();
+    console.log(idToken);
+
     // Create a Google credential with the token
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    console.log(googleCredential)
+    console.log(googleCredential);
 
     // Sign-in the user with the credential
     return auth().signInWithCredential(googleCredential);
@@ -104,9 +114,7 @@ auth()
   return (
     <Styled.Container>
       <Styled.Header>
-        <Top text="Sign In" 
-        onPress={() => navigation.goBack('')}
-        />
+        <Top text="Sign In" onPress={() => navigation.goBack('')} />
       </Styled.Header>
       <Styled.Texts>
         <Styled.Title>Create Account</Styled.Title>
@@ -149,7 +157,6 @@ auth()
             <Ionicons name="eye" size={24} color="black" />
           </Styled.ButtonIcon>
         </Styled.ViewSenha>
-
       </Styled.Inputs>
       <Styled.ViewButton>
         <Button
@@ -160,21 +167,22 @@ auth()
         />
       </Styled.ViewButton>
       <Styled.ViewFooterr>
-      <Styled.ViewOr>
-      <Styled.TextOr>Or Sign Up with</Styled.TextOr>
-      </Styled.ViewOr>
-      <Styled.Icons>          
-        <Styled.IconButton onPress={() => onGoogleButtonPress()}>
-          <Google 
-          />
-        </Styled.IconButton>
-        <Styled.IconButton>
-          <Facebook />
-        </Styled.IconButton>
-      </Styled.Icons>
+        <Styled.ViewOr>
+          <Styled.TextOr>Or Sign Up with</Styled.TextOr>
+        </Styled.ViewOr>
+        <Styled.Icons>
+          <Styled.IconButton onPress={() => onGoogleButtonPress()}>
+            <Google />
+          </Styled.IconButton>
+          <Styled.IconButton>
+            <Facebook />
+          </Styled.IconButton>
+        </Styled.Icons>
       </Styled.ViewFooterr>
       <Styled.Terms>
-      <Styled.TextTerms>By signing up you agree to our Terms and Conditions of Use</Styled.TextTerms>
+        <Styled.TextTerms>
+          By signing up you agree to our Terms and Conditions of Use
+        </Styled.TextTerms>
       </Styled.Terms>
     </Styled.Container>
   );

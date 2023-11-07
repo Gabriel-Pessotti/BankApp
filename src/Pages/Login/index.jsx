@@ -5,11 +5,13 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from '@react-native-community/checkbox';
+import firestore from '@react-native-firebase/firestore';
+
+import auth from '@react-native-firebase/auth';
 import * as yup from 'yup';
 
 import {Input} from '../../Components/Inputs';
 import Button from '../../Components/Button';
-import auth from '@react-native-firebase/auth';
 
 import * as Styled from './styled';
 import Top from '../../Components/Top';
@@ -28,52 +30,40 @@ export default function Login() {
   const navigation = useNavigation();
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
-  useEffect(() =>
-  {
-  const subscriber=auth().onAuthStateChanged(
-    async avatar => {
-      if (avatar){navigation.navigate("Home")}
-    }
-  )
-  return subscriber
-},[]
-  )
-
   const {
     control,
-    watch,
     handleSubmit,
+    watch,
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
-      identifier: '',
-      password: '',
+      identifier: 't@teste.com',
+      password: 'teste12345',
     },
     resolver: yupResolver(schema),
   });
 
-  
-  const email= watch('identifier')
-  const password= watch('password')
-  
+  const email = watch('identifier');
+  const password = watch('password');
+
   const onSubmit = async input => {
-auth()
-  .signInWithEmailAndPassword(email, password)
-  .then(() => {
-    console.log('User account created & signed in!');
-    navigation.navigate("Home")
-  })
-  .catch(error => {
-    if (error.code === 'auth/email-already-in-use') {
-      console.log('That email address is already in use!');
-    }
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+        navigation.navigate('Home');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
 
-    if (error.code === 'auth/invalid-email') {
-      console.log('That email address is invalid!');
-    }
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
 
-    console.error(error);
-  });
+        console.error(error);
+      });
   };
 
   const [senhaa, setSenha] = useState(true);
