@@ -5,14 +5,17 @@ import Tabs from './tabs';
 import OnBoarding from '../Pages/OnBoarding';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
-import Enter from '../Pages/Enter';
-import Splash from '../Pages/Splash';
+import Profil from '../Pages/Profil';
+import Loading from '../Pages/Loading';
+import SendMoney from '../Pages/SendMoney';
+import Detail from '../Pages/Detail';
+import Contacts from '../Pages/Contacts';
 
 const Stack = createNativeStackNavigator();
 
 export default function Routes() {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName="">
       <Stack.Screen
         name="OnBoarding"
         component={OnBoarding}
@@ -29,25 +32,36 @@ export default function Routes() {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Enter"
-        component={Enter}
+        name="Loading"
+        component={Loading}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name="Home"
         component={Tabs}
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="Splash"
-        component={Splash}
+        name="SendMoney"
+        component={SendMoney}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen
-        name="Settings"
-        component={Settings}
+      <Stack.Screen
+        name="Detail"
+        component={Detail}
         options={{headerShown: false}}
-      /> */}
+      />
+      <Stack.Screen
+        name="Contacts"
+        component={Contacts}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Profil"
+        component={Profil}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }

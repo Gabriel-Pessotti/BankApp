@@ -7,8 +7,8 @@ export const Buttons = styled.TouchableOpacity`
   background-color: ${props => props.background || 'transparent'};
   border-color: ${props => props.border || '#ED1B24'};
   border-width: ${props => (props.border ? '1px' : '0px')};
-  width: 100%;
-  height: 60px;
+  width: ${props => (props.width ? props.width : '100%')};
+  height: ${props => (props.height ? props.height : '60px')};
   border-radius: 8px;
   justify-content: center;
   align-items: center;

@@ -1,25 +1,22 @@
-import React, {useEffect, useState} from 'react';
-
+import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CheckBox from '@react-native-community/checkbox';
-import firestore from '@react-native-firebase/firestore';
-
 import auth from '@react-native-firebase/auth';
 import * as yup from 'yup';
 
 import {Input} from '../../Components/Inputs';
 import Button from '../../Components/Button';
-
-import * as Styled from './styled';
 import Top from '../../Components/Top';
 import Google from '../../Assets/svg/google';
 import Facebook from '../../Assets/svg/facebook';
 
+import * as Styled from './styled';
+
 const schema = yup.object().shape({
-  identifier: yup.string().email().required('Informe Seu Email'),
+  identifier: yup.string().email().required('Inform your Email'),
   password: yup
     .string()
     .required('Inform your password')
@@ -37,12 +34,11 @@ export default function Login() {
     formState: {errors, isValid},
   } = useForm({
     defaultValues: {
-      identifier: 't@teste.com',
-      password: 'teste12345',
+      identifier: 'gabriel@gmail.com',
+      password: '123456',
     },
     resolver: yupResolver(schema),
   });
-
   const email = watch('identifier');
   const password = watch('password');
 
@@ -65,6 +61,12 @@ export default function Login() {
         console.error(error);
       });
   };
+
+  function hendleForgotPassword() {
+    auth()
+      .sendPasswordResetEmail(email)
+      .then(() => alert('Redefinition password reset'));
+  }
 
   const [senhaa, setSenha] = useState(true);
 
@@ -100,6 +102,7 @@ export default function Login() {
             errors={errors}
             secureTextEntry={senhaa}
           />
+
           <Styled.ButtonIcon onPress={() => setSenha(!senhaa)}>
             <Ionicons name="eye" size={24} color="black" />
           </Styled.ButtonIcon>
@@ -111,7 +114,7 @@ export default function Login() {
             onValueChange={newValue => setToggleCheckBox(newValue)}
           />
           <Styled.TextCheckBox>Remember Me</Styled.TextCheckBox>
-          <Styled.Forgot onPress={() => navigation.navigate('Register')}>
+          <Styled.Forgot onPress={hendleForgotPassword}>
             <Styled.TextForgot>Forgot Password</Styled.TextForgot>
           </Styled.Forgot>
         </Styled.CheckboxContainer>

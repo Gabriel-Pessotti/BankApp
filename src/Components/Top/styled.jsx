@@ -2,13 +2,20 @@ import styled from 'styled-components/native';
 
 export const ViewTop = styled.View`
 width: 100%;
-justify-content: center;
-flex-direction: row;
-`;
-export const ButtonIcon = styled.TouchableOpacity`
-position: absolute;
+height: 50px;
 align-items: center;
 justify-content: center;
+flex-direction: row;
+margin-top: 30px;
+`;
+export const ButtonIcon = styled.TouchableOpacity`
+width: 48px;
+height: 48px;
+position: absolute;
+justify-content: center;
+background-color: ${({theme}) => theme.Colors.whiteWeak};
+border-radius: 28px;
+align-items: center;
 left: 10px;
 `;
 

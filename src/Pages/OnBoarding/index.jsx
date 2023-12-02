@@ -1,13 +1,12 @@
-
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 
-
-import * as Styled from './styled';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import Primary from '../../Assets/svg/primary';
 import Secondary from '../../Assets/svg/secondary';
 import Terceary from '../../Assets/svg/terceary';
-import { useNavigation } from '@react-navigation/native';
+
+import * as Styled from './styled';
 
 export default function OnBoarding() {
   const navigation = useNavigation();

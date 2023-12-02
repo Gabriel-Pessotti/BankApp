@@ -12,6 +12,7 @@ export default function Button(props) {
         background={props?.background}
         border={props?.border}
         whidth={props?.whidth}
+        height={props?.height}
         >
         <Styled.Text color={props.color}>{props.name}</Styled.Text>
       </Styled.Buttons>

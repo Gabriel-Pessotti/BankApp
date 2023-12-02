@@ -2,7 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  background-color: #fff;
+  background-color: ${({theme}) => theme.Colors.white};
   padding-left: 20px;
   padding-right: 20px;
 `;
@@ -56,7 +56,7 @@ export const Forgot = styled.TouchableOpacity`
   right: 0;
 `;
 export const TextForgot = styled.Text`
-  color: #57435c;
+  color: ${({theme}) => theme.Colors.purpleBold};
   font-size: 14px;
   font-weight: 500;
   line-height: 22px;
@@ -125,7 +125,7 @@ bottom: 30px;
 margin-left: 15px;
 `;
 export const TextTerms = styled.Text`
-color: #78828A;
+color:  ${({theme}) => theme.Colors.grayBold};
 text-align: center;
 font-size: 14px;
 font-weight: 500;

@@ -14,12 +14,12 @@ export const TextInput = styled.TextInput`
   border-width: 1px;
   border-color: ${({theme}) => theme.Colors.whiteLigth};
   text-align: left;
-  font-size: 14px;
+  font-size: ${props => (props.fontSize ? props.fontSize : '14px')};;
   border-radius: 16px;
-  height: 60px;
+  height: ${props => (props.heigth ? props.heigth : '60px')};
   background-color: ${({theme}) => theme.Colors.white};
   border-width: 3px;
-  padding-left: 5px;
+  padding-left: 10px;
   color: ${({theme}) => theme.Colors.black};
   
 `;

@@ -1,21 +1,19 @@
 import React, {useEffect, useState} from 'react';
-
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import fireStore from '@react-native-firebase/firestore';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import * as yup from 'yup';
 import auth from '@react-native-firebase/auth';
 
-import {Input} from '../../Components/Inputs';
 import Button from '../../Components/Button';
-
-import * as Styled from './styled';
+import {Input} from '../../Components/Inputs';
 import Top from '../../Components/Top';
 import Google from '../../Assets/svg/google';
 import Facebook from '../../Assets/svg/facebook';
+
+import * as Styled from './styled';
 
 const schema = yup.object().shape({
   fullName: yup.string().required('Informe seu nome completo'),
@@ -63,15 +61,6 @@ export default function Register() {
 
   const sendAll = async => {
     onSubmit();
-    sendName();
-  };
-
-  const sendName = () => {
-    fireStore()
-      .collection('Infos')
-      .add({fullName: fullName})
-      .then(() => console.log('Successfully'))
-      .catch(erro => console.error(erro, 'aki'));
   };
 
   const onSubmit = () => {
@@ -79,7 +68,7 @@ export default function Register() {
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
-        navigation.navigate('Enter');
+        navigation.navigate('Loading',{fullName:fullName});
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
@@ -95,7 +84,6 @@ export default function Register() {
   };
 
   async function onGoogleButtonPress() {
-    console.log('clicou');
     // Check if your device supports Google Play
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
     // Get the users ID token

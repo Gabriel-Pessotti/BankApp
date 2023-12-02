@@ -1,5 +1,7 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, {useState, useEffect} from 'react';
 import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -7,6 +9,8 @@ import {ThemeProvider} from 'styled-components/native';
 
 import Routes from './src/Routes';
 import {colors} from './src/Components/Theme/colors';
+import {View} from './src/Pages/OnBoarding/styled';
+import {Text} from './src/Components/Top/styled';
 
 export default function App() {
   const firebaseConfig = {
@@ -22,6 +26,22 @@ export default function App() {
     firebase.initializeApp(firebaseConfig);
   }
 
+  // Define um estado inicializando enquanto o Firebase conecta
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(true);
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // cancela a inscrição ao desmontar
+  }, []);
+
+  const onAuthStateChanged = user => {
+    // setUser(user);
+    if (initializing) setInitializing(false);
+  };
+
+  if (initializing) return null;
+
   return (
     <ThemeProvider theme={colors}>
       <NavigationContainer>
@@ -30,7 +50,13 @@ export default function App() {
           barStyle="dark-content"
           translucent={true}
         />
-        <Routes />
+        {user ? (
+          <Routes />
+        ) : (
+          <View>
+            <Text>Login</Text>
+          </View>
+        )}
       </NavigationContainer>
     </ThemeProvider>
   );

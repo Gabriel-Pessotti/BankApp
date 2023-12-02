@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.SafeAreaView`
-  background-color: #170d30;
+  background-color: ${({theme}) => theme.Colors.purpleStrong};
   flex: 1;
   padding-left: 20px;
   padding-right: 20px;
@@ -13,7 +13,7 @@ export const Texts = styled.View`
 `;
 export const Image = styled.Image``;
 export const Text = styled.Text`
-  color: #fff;
+  color: ${({theme}) => theme.Colors.white};
   font-size: 35px;
   font-style: normal;
   font-weight: 600;
@@ -21,7 +21,7 @@ export const Text = styled.Text`
   letter-spacing: 0.175px;
 `;
 export const Sub = styled.Text`
-  color: #9ca4ab;
+  color: ${({theme}) => theme.Colors.grayWak};
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -53,5 +53,5 @@ export const ButtonNext = styled.View`
   right: 0;
   `;
 export const TextButton = styled.Text`
-  color: white;
+  color: ${({theme}) => theme.Colors.white};
 `;
