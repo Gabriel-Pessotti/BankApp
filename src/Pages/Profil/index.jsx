@@ -9,6 +9,7 @@ import Top from '../../Components/Top';
 import ListProfile from '../../Components/ListProfile';
 
 import * as Styled from './styled';
+import { colors } from '../../Components/Theme/colors';
 
 export default function Profil() {
   const navigation = useNavigation();
@@ -75,7 +76,7 @@ export default function Profil() {
         </Dialog.Content>
         <Button
           name="Cancel"
-          color="#4F3D56"
+          color={colors.Colors.purpleBold}
           onPress={() => setShowModal(false)}
         />
         <Button

@@ -120,9 +120,7 @@ export const TextOr = styled.Text`
 `;
 export const Terms = styled.View`
 width: 100%;
-position: absolute;
-bottom: 30px;
-margin-left: 15px;
+margin-top: 90px;
 `;
 export const TextTerms = styled.Text`
 color:  ${({theme}) => theme.Colors.grayBold};

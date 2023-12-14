@@ -6,6 +6,7 @@ export const colors = {
         whiteWeak: '#ECF1F6',
         whiteColor: '#fdfdfd',
         whiteLigth: '#E5E4E3',
+        whiteOpacity: '#ffffff5a',
         black: '#000000',
         blackLight: '#1F2C37',
         grayBold: '#78828A',

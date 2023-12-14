@@ -14,6 +14,7 @@ import Google from '../../Assets/svg/google';
 import Facebook from '../../Assets/svg/facebook';
 
 import * as Styled from './styled';
+import { colors } from '../../Components/Theme/colors';
 
 const schema = yup.object().shape({
   fullName: yup.string().required('Informe seu nome completo'),
@@ -115,7 +116,7 @@ export default function Register() {
           <Input
             title="Full Name"
             placeholder="Enter your name"
-            colorPlaceholder="#000"
+            colorPlaceholder={colors.Colors.black}
             name="fullName"
             control={control}
             errors={errors}
@@ -125,7 +126,7 @@ export default function Register() {
           <Input
             title="Email Address"
             placeholder="Email"
-            colorPlaceholder="#000"
+            colorPlaceholder={colors.Colors.black}
             name="identifier"
             control={control}
             errors={errors}
@@ -135,7 +136,7 @@ export default function Register() {
           <Input
             title="Password"
             placeholder="Password"
-            colorPlaceholder="#000"
+            colorPlaceholder={colors.Colors.black}
             name="password"
             control={control}
             errors={errors}
@@ -151,7 +152,7 @@ export default function Register() {
           disabled={!isValid}
           onPress={handleSubmit(sendAll)}
           name="Create An Account"
-          background={isValid ? '#4F3D56' : '#E5E4E3'}
+          background={isValid ? colors.Colors.purpleBold : colors.Colors.whiteLigth}
         />
       </Styled.ViewButton>
       <Styled.ViewFooterr>

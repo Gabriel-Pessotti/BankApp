@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
@@ -59,6 +60,7 @@ export default function SendMoney() {
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
       />
     </Styled.Container>
   );

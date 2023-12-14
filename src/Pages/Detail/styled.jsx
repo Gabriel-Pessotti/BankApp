@@ -43,7 +43,7 @@ export const ViewMoney = styled.View`
   z-index: 1;
 `;
 export const ViewMessage = styled.View`
-  margin-top: 30px;
+margin-top: 7px;
 `;
 export const ViewButton = styled.View`
   width: 100%;

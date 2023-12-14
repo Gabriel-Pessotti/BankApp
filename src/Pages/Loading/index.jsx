@@ -39,7 +39,7 @@ export default function Loading() {
       .add({fullName: fullName, Balance: 15000, uid:id.uid, Foto: UrlPhoto })
       .then(() => console.log('Successfully'),
       navigation.navigate('Home'))
-      .catch(erro => console.error(erro, 'aki'));
+      .catch(erro => console.error(erro, 'Deu erro'));
   };
 
   return (

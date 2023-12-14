@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, useIsFocused} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useForm} from 'react-hook-form';
@@ -15,10 +15,12 @@ import UpLoad from '../../Assets/svg/upload';
 import TransferStatusModal from '../../Components/TransferStatus';
 
 import * as Styled from './styled';
+import {colors} from '../../Components/Theme/colors';
 
 export default function Detail() {
   const navigation = useNavigation();
-  const [showModal, setShowModal] = React.useState(false); 
+  const isFocused = useIsFocused();
+  const [showModal, setShowModal] = React.useState(false);
   const routes = useRoute();
   const [transferAmount, setTransferAmount] = useState('');
   const user = routes.params.item;
@@ -50,7 +52,6 @@ export default function Detail() {
     getInfo();
     return subscriber;
   }, [uid]);
-
   const getInfo = async () => {
     try {
       if (uid) {
@@ -73,29 +74,31 @@ export default function Detail() {
       console.log(error);
     }
   };
-  const handleAmountChange = formattedValue => {
-    
-    const numericValue = formattedValue.replace(/[^0-9,.]/g, '');
-
+  const handleAmountChange = value => {
+    const numericValue = value.replace(/[^0-9,.]/g, '');
     const sanitizedValue = numericValue.replace(',', '.');
-
     const floatValue = parseFloat(sanitizedValue);
-
-
-    if (!isNaN(floatValue) && isFinite(floatValue)) {
+    if (!isNaN(floatValue) && isFinite(floatValue) && floatValue >= 0) {
       setShowModal(true);
       setTransferAmount(floatValue);
     } else {
       console.log('Por favor, insira um valor numérico válido.');
     }
+    setTransferAmount(amount);
   };
 
   const [statusModalVisible, setStatusModalVisible] = React.useState(false);
   const [statusMessage, setStatusMessage] = React.useState('');
 
   const handleTransfer = async () => {
+    const sanitizedAmount = transferAmount
+      .replace(/[^\d,]+/g, '')
+      .replace(',', '.');
+
+    const transferAmountValue = parseFloat(sanitizedAmount);
+
     try {
-      const Money = parseFloat(data.Balance) - parseFloat(transferAmount);
+      const Money = parseFloat(data.Balance) - parseFloat(transferAmountValue);
       if (Money >= 0) {
         await firestore().collection('Infos').doc(data.id).update({
           Balance: Money,
@@ -113,8 +116,14 @@ export default function Detail() {
     }
   };
   const receive = async () => {
+    const sanitizedAmount = transferAmount
+      .replace(/[^\d,]+/g, '')
+      .replace(',', '.');
+
+    const transferAmountValue = parseFloat(sanitizedAmount);
+
     try {
-      const Money = parseFloat(user.Balance) + parseFloat(transferAmount);
+      const Money = parseFloat(user.Balance) + parseFloat(transferAmountValue);
       await firestore().collection('Infos').doc(user.id).update({
         Balance: Money,
       });
@@ -122,7 +131,6 @@ export default function Detail() {
       console.error('Erro durante a atualização do saldo:', error);
     }
   };
-
   return (
     <Styled.Container>
       <Top onPress={() => navigation.navigate('SendMoney')} text="Send Money" />
@@ -143,7 +151,7 @@ export default function Detail() {
         <Input
           title="Amount:"
           placeholder=""
-          colorPlaceholder="#000"
+          colorPlaceholder={colors.Colors.black}
           name="Amount"
           heigth="72px"
           fontSize="25px"
@@ -152,13 +160,15 @@ export default function Detail() {
           keyboardType="numeric"
           mask={value => {
             const numericValue = value.replace(/[^0-9]/g, '');
+            const floatValue = parseFloat(numericValue) / 100;
 
-            if (numericValue !== '') {
-              const floatValue = parseFloat(numericValue);
+            if (!isNaN(floatValue) && isFinite(floatValue)) {
               return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
-              }).format(floatValue / 100);
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(floatValue);
             }
 
             return '';
@@ -169,7 +179,7 @@ export default function Detail() {
         <Input
           title="Message:"
           placeholder="Thank you for your cooperation :)"
-          colorPlaceholder="#000"
+          colorPlaceholder={colors.Colors.black}
           name="description"
           heigth="132px"
           control={control}
@@ -180,7 +190,7 @@ export default function Detail() {
         <Button
           onPress={() => handleAmountChange(amount)}
           name="Send Money"
-          background="#4F3D56"
+          background={colors.Colors.purpleBold}
           height="46px"
           onp
         />
@@ -195,7 +205,7 @@ export default function Detail() {
             <UpLoad />
           </Styled.Logo>
           <Styled.Text variant="bodyMedium">Total transfer</Styled.Text>
-          <Styled.TextValue>${transferAmount}</Styled.TextValue>
+          <Styled.TextValue>{transferAmount}</Styled.TextValue>
           <Styled.SubTitle>Transfer detail</Styled.SubTitle>
           <Styled.Description>
             <Styled.TextFormat>From</Styled.TextFormat>
@@ -207,7 +217,7 @@ export default function Detail() {
           </Styled.Description>
           <Styled.Description>
             <Styled.TextFormat>Transfer</Styled.TextFormat>
-            <Styled.TextBold>$154,42</Styled.TextBold>
+            <Styled.TextBold>{transferAmount}</Styled.TextBold>
           </Styled.Description>
           <Styled.Description>
             <Styled.TextFormat>Admin fee</Styled.TextFormat>
@@ -216,7 +226,7 @@ export default function Detail() {
           <Styled.Separation></Styled.Separation>
           <Styled.Description>
             <Styled.TextFormat>Total transfer</Styled.TextFormat>
-            <Styled.TextBold>${transferAmount}</Styled.TextBold>
+            <Styled.TextBold>{transferAmount}</Styled.TextBold>
           </Styled.Description>
         </Dialog.Content>
 
@@ -224,14 +234,14 @@ export default function Detail() {
           <Styled.ButtonCancel>
             <Button
               name="Cancel"
-              color="#4F3D56"
+              color={colors.Colors.red}
               onPress={() => setShowModal(false)}
             />
           </Styled.ButtonCancel>
           <Styled.ButtonConfirm>
             <Button
               name="Confirm"
-              background="#4F3D56"
+              background={colors.Colors.purpleBold}
               onPress={() => handleTransfer()}
             />
           </Styled.ButtonConfirm>
@@ -242,7 +252,7 @@ export default function Detail() {
         visible={statusModalVisible}
         onDismiss={() => setStatusModalVisible(false)}
         statusMessage={statusMessage}
-        isSuccess={statusMessage.includes('sucesso')} 
+        isSuccess={statusMessage.includes('sucesso')}
       />
     </Styled.Container>
   );

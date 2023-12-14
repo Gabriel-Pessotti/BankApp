@@ -61,6 +61,7 @@ export default function Contacts() {
         data={data}
         renderItem={renderItem}
         keyExtractor={(_, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
       />
     </Styled.Container>
   );

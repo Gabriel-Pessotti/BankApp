@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {useNavigation, useIsFocused} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-import { formatCurrency } from './utils'; 
+import {formatCurrency} from './utils';
 import CardSvg from '../../Assets/svg/cardSvg';
 import CardsHome from '../../Components/CardsHome';
 
@@ -11,16 +11,21 @@ import * as Styled from './styled';
 
 export default function Home() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [data, setData] = useState();
   const [uid, setUid] = useState();
+  const [balance, setBalance] = useState();
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(async (item) => {
-      setUid(item.uid);
-    });
-    getInfo();
-    return subscriber;
-  }, [uid]);
+    if (isFocused) {
+      const subscriber = auth().onAuthStateChanged(async item => {
+        setUid(item.uid);
+      });
+      getInfo();
+
+      return subscriber;
+    }
+  }, [uid, isFocused]);
 
   const getInfo = async () => {
     try {
@@ -30,19 +35,19 @@ export default function Home() {
           .where('uid', '==', uid)
           .get();
         setData(infoData._docs[0]._data);
+        setBalance(infoData._docs[0]._data?.Balance);
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  const formattedBalance = data?.Balance ? formatCurrency(data.Balance) : '';
+  const formattedBalance = balance ? formatCurrency(balance) : '';
 
   return (
     <Styled.Container>
       <Styled.Header>
         <Styled.ViewPic>
-          {data?.Foto ? <Styled.Picture source={{ uri: data?.Foto }} /> : null}
+          {data?.Foto ? <Styled.Picture source={{uri: data?.Foto}} /> : null}
           <Styled.TextsTop>
             <Styled.TextWelcome>Welcome back</Styled.TextWelcome>
             <Styled.Name>{data?.fullName}</Styled.Name>
@@ -58,12 +63,32 @@ export default function Home() {
       </Styled.ViewCard>
       <Styled.ButtonsCard>
         <Styled.Cards>
-          <CardsHome onPress={() => navigation.navigate('SendMoney')} icon="Send" name="Send Money" subtitle="Make transfer" />
-          <CardsHome onPress={() => navigation.navigate('home')} icon="Wallet" name="Pay the bill" subtitle="Lorem ipsum" />
+          <CardsHome
+            onPress={() => navigation.navigate('SendMoney')}
+            icon="Send"
+            name="Send Money"
+            subtitle="Make transfer"
+          />
+          <CardsHome
+            onPress={() => navigation.navigate('home')}
+            icon="Wallet"
+            name="Pay the bill"
+            subtitle="Lorem ipsum"
+          />
         </Styled.Cards>
         <Styled.SecondLineCards>
-          <CardsHome onPress={() => navigation.navigate('home')} icon="Request" name="Request" subtitle="Ask for money" />
-          <CardsHome onPress={() => navigation.navigate('Contacts')} icon="Users" name="Contact" subtitle="Take acc to acc" />
+          <CardsHome
+            onPress={() => navigation.navigate('home')}
+            icon="Request"
+            name="Request"
+            subtitle="Ask for money"
+          />
+          <CardsHome
+            onPress={() => navigation.navigate('Contacts')}
+            icon="Users"
+            name="Contact"
+            subtitle="Take acc to acc"
+          />
         </Styled.SecondLineCards>
       </Styled.ButtonsCard>
     </Styled.Container>

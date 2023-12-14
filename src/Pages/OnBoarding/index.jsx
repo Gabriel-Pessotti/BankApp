@@ -7,6 +7,7 @@ import Secondary from '../../Assets/svg/secondary';
 import Terceary from '../../Assets/svg/terceary';
 
 import * as Styled from './styled';
+import { colors } from '../../Components/Theme/colors';
 
 export default function OnBoarding() {
   const navigation = useNavigation();
@@ -55,7 +56,7 @@ return (
     renderItem={carrosel}
     data={slides}
     activeDotStyle={{
-      backgroundColor: '#fff',
+      backgroundColor: colors.Colors.white,
       width: 25,
       height: 10,
       bottom: 500,
@@ -64,7 +65,7 @@ return (
           
     }}
     dotStyle={{
-      backgroundColor: '#ffffff5a',
+      backgroundColor: colors.Colors.whiteOpacity,
       bottom: 500,
   
     }}

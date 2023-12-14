@@ -13,7 +13,9 @@ import Top from '../../Components/Top';
 import Google from '../../Assets/svg/google';
 import Facebook from '../../Assets/svg/facebook';
 
+
 import * as Styled from './styled';
+import { colors } from '../../Components/Theme/colors';
 
 const schema = yup.object().shape({
   identifier: yup.string().email().required('Inform your Email'),
@@ -73,7 +75,7 @@ export default function Login() {
   return (
     <Styled.Container>
       <Styled.Header>
-        <Top text="Sign In" />
+        <Top onPress={() => navigation.navigate('OnBoarding')} text="Sign In" />
       </Styled.Header>
       <Styled.Texts>
         <Styled.Title>Hi, Welcome Back! 👋</Styled.Title>
@@ -86,7 +88,7 @@ export default function Login() {
           <Input
             title="Email Address"
             placeholder="Email"
-            colorPlaceholder="#000"
+            colorPlaceholder={colors.Colors.black}
             name="identifier"
             control={control}
             errors={errors}
@@ -96,7 +98,7 @@ export default function Login() {
           <Input
             title="Password"
             placeholder="Password"
-            colorPlaceholder="#000"
+            colorPlaceholder={colors.Colors.black}
             name="password"
             control={control}
             errors={errors}
@@ -124,7 +126,7 @@ export default function Login() {
           disabled={!isValid}
           onPress={handleSubmit(onSubmit)}
           name="Get Started"
-          background={isValid ? '#4F3D56' : '#E5E4E3'}
+          background={isValid ? colors.Colors.purpleBold : colors.Colors.whiteLigth}
         />
         <Styled.ViewFooterr>
           <Styled.TextAccount>Don’t have an account?</Styled.TextAccount>

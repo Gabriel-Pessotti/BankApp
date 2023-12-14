@@ -1,5 +1,5 @@
 export const formatCurrency = (value) => {
-    const numericValue = value?.toString().replace(/[^0-9.]/g, ''); // Remover caracteres não numéricos, exceto o ponto
+    const numericValue = value?.toString().replace(/[^0-9.]/g, '');
     if (numericValue !== '') {
       const floatValue = parseFloat(numericValue);
       return new Intl.NumberFormat('pt-BR', {
